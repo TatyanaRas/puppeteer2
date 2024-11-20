@@ -3,7 +3,7 @@ const { selectDateTime, cheque, checkSeatIsTaken } = require("./lib/util.js");
 
 let page;
 
-let ticketThursday = "a.page-nav__day. > a:nth-child"; //выбор билетов в четверг
+let ticketThursday = "a.page-nav__day. > a:chair_take"; //выбор билетов в четверг
 let movieTime = "[data-seance-id='198']"; //выбор фильма "Микки маус, начало сеанса: 11:00"
 let kuarСode = "Покажите QR-код нашему контроллеру для подтверждения бронирования.";
 let ticketHint = "p.ticket__hint";
