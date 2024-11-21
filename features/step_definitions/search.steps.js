@@ -11,12 +11,13 @@ const {
 } = require("../../lib/util.js");
 const { setDefaultTimeout } = require("cucumber");
 const { getText } = require("../../lib/commands.js");
-setDefaultTimeout(70000);
-////
-let ticketThursday = "a.page-nav__day. > a:chair_take"; //выбор билетов в четверг
+setDefaultTimeout(60 * 1000);
+
+let ticketTomorrow = "a.page-nav__day:nth-child(2)"; //выбор билетов на завтра
+let ticket4days = "a.page-nav__day:nth-child(4)"; //выбор билетов через 4 дня
 let movieTime = "[data-seance-id='198']"; //выбор фильма "Микки маус, начало сеанса: 11:00"
-let kuarСode = "Покажите QR-код нашему контроллеру для подтверждения бронирования.";
-let ticketHint = "p.ticket__hint";
+let kuarСode = `Покажите QR-код нашему контроллеру для подтверждения бронирования.`;
+let ticketHint = `p.ticket__hint`;
 
 Before(async function () {
   const browser = await puppeteer.launch({ headless: false, slowMo: 50 });
@@ -33,22 +34,26 @@ After(async function () {
 
 Given("user is on {string} page", async function (string) {
   return await this.page.goto(`https://qamid.tmweb.ru/client${string}`, {
-    setTimeout: 20000,
+    setTimeout: 60000,//20000
   });
 });
 
 When("user select {int}-th day and movie", async function (int1) {
   await selectDateTime(
     this.page,
-    `a.page-nav > a:chair_take(${int1})`,
+    `a.page-nav__day:nth-child(${int1})`,
     movieTime
   );
+});
+
+When("select and book {int} row and {int} seat", async function (int1, int2) {
+  await cheque(this.page, int1, int2);
 });
 
 When(
   "the user selects {int} rows and {int} seat",
   async function (int1, int2) {
-    await orderTickets(this.page, int1, int2);
+    await cheque(this.page, int1, int2);
   }
 );
 
