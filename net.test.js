@@ -23,19 +23,19 @@ describe("Booking 1 movie ticket", () => {
   //Бронируем один билет на фильм на завтра
   test("We book one ticket for the movie", async () => {
     await selectDateTime(page, ticketTomorrow, movieTime);
-    await cheque(page, '.buying-scheme__row(1)', 'span:nth-child(10)');
-    const actual = await getText(page, 'p.ticket__hint');
+     await cheque(page, '.buying-scheme__row(2)', 'span:nth-child(10)');
+     const actual = await getText(page, 'p.ticket__hint');
     expect(actual).toContain(
       'После оплаты билет будет доступен в этом окне, а также придёт вам на почту. Покажите QR-код нашему контроллёру у входа в зал.'
     );
-   
-  });
+  })
+});
 
-})
+
 //Бронируем один билет на фильм через 4 дня
   test("We book one movie ticket in 4 days", async () => {
     await selectDateTime(page, ticket4days, movieTime);
-    await cheque(page, '.buying-scheme__row(1)', 'span:nth-child(10)');
+    await cheque(page, '.buying-scheme__row(2)', 'span:nth-child(10)');
     const actual = await getText(page, 'p.ticket__hint');
     expect(actual).toContain(
       'После оплаты билет будет доступен в этом окне, а также придёт вам на почту. Покажите QR-код нашему контроллёру у входа в зал.'
@@ -48,7 +48,7 @@ describe("Booking 1 movie ticket", () => {
    await expect(async () => {
      await selectDateTime(page, ticketTomorrow, movieTime);
      await cheque(
-       page, ".buying-scheme__row(1) > span:nth-child(9)");
+       page, ".buying-scheme__row(1) > span:nth-child(10)");
      
      expect(String(await page.$eval("button", (button) => {
        return button.disabled;
