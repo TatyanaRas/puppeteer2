@@ -1,9 +1,20 @@
 const puppeteer = require("puppeteer");
 const chai = require("chai");
 const expect = chai.expect;
-const { Given, When, Then, Before, After, setDefaultTimeout } = require('cucumber');
+const {
+  Given,
+  When,
+  Then,
+  Before,
+  After,
+  setDefaultTimeout,
+} = require("cucumber");
 const { clickElement, getText } = require("../../lib/commands.js");
-const { selectDateTime, cheque, checkSeatIsTaken} = require("../../lib/util.js");
+const {
+  selectDateTime,
+  cheque,
+  checkSeatIsTaken,
+} = require("../../lib/util.js");
 setDefaultTimeout(60 * 1000);
 
 //let ticketTomorrow = "a.page-nav__day:nth-child(2)"; //выбор билетов на завтра
@@ -30,58 +41,55 @@ Given("user is on {string} page", async function (string) {
 });
 //выбираем 2 день
 When("user select 2-th day and movie", async function () {
-  await selectDateTime(this.page, 'a.page-nav__day:nth-child(2)',movieTime);
+  await selectDateTime(this.page, "a.page-nav__day:nth-child(2)", movieTime);
 });
 
-When("the user selects 2 rows and 10 seat", async function () {
-  await cheque(this.page, '.buying-scheme__row(2)', 'span:nth-child(10)'); 
+When("the user selects 1 rows and 10 seat", async function () {
+  await cheque(this.page, ".buying-scheme__row(1)", "span:nth-child(10)");
 });
- 
+
 //выбираем 4 день
 
 When("user select 4-th day and movie", async function () {
-  await selectDateTime(this.page, 'a.page-nav__day:nth-child(4)', movieTime);
+  await selectDateTime(this.page, "a.page-nav__day:nth-child(4)", movieTime);
 });
 
 When("the user selects rows and seat", async function () {
-  await checkSeatIsTaken(this.page, '.buying-scheme__row(2)', 'span:nth-child(10)');
-  });
+  await checkSeatIsTaken(
+    this.page,
+    ".buying-scheme__row(1)",
+    "span:nth-child(10)"
+  );
+});
 
 // 2 день забронированные места выбираем
 When(
-  "sees that 1 row and 10 seat is taken trying select them",
+  "sees that 1 row and 3 seat is taken trying select them",
   async function () {
-    await checkSeatIsTaken(this.page, '.buying-scheme__row(1)', 'span:nth-child(10)');
-     
-  })
-
+    await checkSeatIsTaken(
+      this.page, ".buying-scheme__row(1)", "span:nth-child(3)"
+    );
+  }
+);
 
 // нажимаем забронировать
-When("user click button", async function () {
+/*When("user click button", async function () {
   await clickElement(this.page, 'button.acceptin-button');
-});
+});*/
 
 // Чек подтверждение
 Then("user received confirmation {string}", async function (string) {
-  const actual = await getText(this.page, 'p.ticket__hint');
-  expect(actual).contain('После оплаты билет будет доступен в этом окне, а также придёт вам на почту. Покажите QR-код нашему контроллёру у входа в зал.');
+  const actual = await getText(this.page, "p.ticket__hint");
+  expect(actual).contain(
+    "После оплаты билет будет доступен в этом окне, а также придёт вам на почту. Покажите QR-код нашему контроллёру у входа в зал."
+  );
 });
-  
-/*Then("user received confirmation {string}", async function (string) {
-  const actual = await getText(this.page, 'p.ticket__hint');
-  const expected = await string;
-  expect(actual).contain(expected);
-});*/
 
 //Кнопка забронировать не активна
 Then("Book button is not active", async function () {
- const buttonStatus = await this.page.$eval(
+  const buttonStatus = await this.page.$eval(
     ".acceptin-button",
-   (el) => el.disabled  );
+    (el) => el.disabled
+  );
   expect(buttonStatus).equal(true);
 });
-
-
-
-
-
